@@ -1,0 +1,10 @@
+node_modules
+.next
+.DS_Store
+npm-debug.log*
+
+# Env files (keep examples committed)
+.env
+.env.local
+.env.*.local
+

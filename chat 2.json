@@ -1,0 +1,157 @@
+{
+  "type": "structured_work_log",
+  "generated_at": "2026-01-11",
+  "note": "This is a structured work log summary (not a verbatim chat export). It reflects the major decisions, changes, and verification steps completed in this workspace.",
+  "project": {
+    "workspace": "C:\\Users\\daves\\Desktop\\Code\\Projects\\headless-wp-starter",
+    "export_folder": "option-b",
+    "intended_repo_name": "headless-wordpress-starter-kit",
+    "target_audience": "WordPress developers (Studio-first), with Next.js as the frontend implementation"
+  },
+  "high_level_goals": [
+    "Modernize an outdated Postlight starter into a Studio-first, posts-only starter kit",
+    "Make the frontend consistent, safe, and easy to run for beginners",
+    "Prepare an Option B clean export suitable for a brand-new GitHub repo",
+    "Remove licensing/packaging risks (Docker bootstrap, bundled paid plugins, unused vulnerable deps)"
+  ],
+  "key_decisions": [
+    {
+      "decision": "Adopt Option B (fresh repo export) rather than continuing as a Postlight fork",
+      "reason": "Repo history and many assets were still Postlight; modern app is a rewrite and should be published cleanly"
+    },
+    {
+      "decision": "Run WordPress via WordPress Studio (Developer template) rather than Docker",
+      "reason": "Studio provides an easier, modern dev experience and avoids maintaining Docker bootstrap scripts"
+    },
+    {
+      "decision": "Use npm + Node 20 LTS",
+      "reason": "Lower friction for most devs and keeps dependencies current"
+    },
+    {
+      "decision": "Drop custom Courses/CPT demo from the starter",
+      "reason": "Keeps the starter beginner-friendly and focused on posts via REST + GraphQL"
+    },
+    {
+      "decision": "License Option B under MIT",
+      "reason": "Allows proprietary/enterprise/client work without GPL distribution constraints"
+    }
+  ],
+  "major_changes_summary": [
+    {
+      "area": "Frontend UI",
+      "changes": [
+        "Applied a dark moving gradient background globally",
+        "Simplified homepage buttons and flows to posts-only",
+        "Homepage now shows the WordPress site title dynamically (REST index name)"
+      ]
+    },
+    {
+      "area": "Routes",
+      "changes": [
+        "Removed /courses",
+        "Added /rest-posts (REST list) and /posts/[slug] (REST detail)",
+        "Added /graphql-posts (GraphQL list) and /graphql-posts/[slug] (GraphQL detail)"
+      ]
+    },
+    {
+      "area": "WordPress endpoints",
+      "changes": [
+        "Default URLs updated to Studio site http://localhost:8881",
+        "Environment variables standardized: NEXT_PUBLIC_WORDPRESS_REST_URL, NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL"
+      ]
+    },
+    {
+      "area": "Tooling and security",
+      "changes": [
+        "Standardized frontend on npm + package-lock.json",
+        "Removed unused wpapi dependency due to unpatched transitive vulnerability; npm audit now reports 0 vulnerabilities",
+        "Added Node 20 policy via .nvmrc and frontend/.nvmrc",
+        "Added typecheck script (tsc --noEmit)"
+      ]
+    },
+    {
+      "area": "Docker removal",
+      "changes": [
+        "Removed Dockerfile, docker-compose, docker bootstrap scripts, and bundled plugin zips (including WP Migrate DB Pro zips)",
+        "Updated root scripts/docs to Studio-first workflow"
+      ]
+    },
+    {
+      "area": "Option B export",
+      "changes": [
+        "Created option-b/ export containing only the modern frontend and minimal root files",
+        "Added MIT LICENSE, README, CHANGELOG, package.json, .gitignore"
+      ]
+    }
+  ],
+  "wordpress_setup_assumptions": {
+    "recommended": "WordPress Studio 'Developer' template",
+    "example_site_url": "http://localhost:8881",
+    "required_plugin_for_graphql": "WPGraphQL (https://wordpress.org/plugins/wp-graphql/)",
+    "notes": [
+      "REST works on default WordPress installs; GraphQL examples require WPGraphQL active",
+      "The starter does not include auth by default (kept simple on purpose)"
+    ]
+  },
+  "verification_steps_run": [
+    {
+      "context": "option-b/frontend",
+      "commands": [
+        "npm ci",
+        "npm run lint",
+        "npm run typecheck",
+        "npm run build",
+        "npm audit"
+      ],
+      "results": [
+        "lint: pass",
+        "typecheck: pass",
+        "build: pass (after making WP-fetching routes dynamic)",
+        "npm audit: 0 vulnerabilities"
+      ]
+    },
+    {
+      "context": "runtime sanity",
+      "commands": [
+        "Stopped stale next dev process holding frontend/.next/dev/lock",
+        "Removed frontend/.next/dev/lock"
+      ],
+      "results": [
+        "next dev starts cleanly and serves /, /rest-posts, /graphql-posts, /graphql-posts/[slug]"
+      ]
+    }
+  ],
+  "notable_fixes": [
+    {
+      "issue": "next build failed because it tried to prerender pages that fetch WordPress at build time",
+      "fix": "Marked WP-fetching routes as dynamic (force-dynamic) and added graceful error handling for list pages"
+    },
+    {
+      "issue": "/rest-posts showed localhost:8883 and did not reflect Studio posts",
+      "fix": "Updated frontend/.env.local to point to localhost:8881 and restarted next dev"
+    }
+  ],
+  "files_of_interest": [
+    "option-b/README.md",
+    "option-b/CHANGELOG.md",
+    "option-b/LICENSE",
+    "option-b/package.json",
+    "option-b/frontend/README.md",
+    "option-b/frontend/.env.example",
+    "option-b/frontend/package.json",
+    "option-b/frontend/package-lock.json",
+    "option-b/frontend/src/app/page.tsx",
+    "option-b/frontend/src/app/rest-posts/page.tsx",
+    "option-b/frontend/src/app/graphql-posts/page.tsx",
+    "option-b/frontend/src/app/graphql-posts/[slug]/page.tsx",
+    "option-b/frontend/src/lib/wp-rest.ts",
+    "option-b/frontend/src/lib/wp-graphql.ts"
+  ],
+  "open_items_before_github_push": [
+    "Create a new GitHub repo named headless-wordpress-starter-kit (not a fork)",
+    "From option-b/: ensure only intended files are committed (no .env.local, no .next, no node_modules)",
+    "Double-check author/branding text in README is exactly what you want",
+    "Tag and publish release 0.1.0 using CHANGELOG.md"
+  ]
+}
+

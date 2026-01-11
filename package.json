@@ -1,0 +1,14 @@
+{
+  "name": "headless-wordpress-starter-kit",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Modern Next.js + WordPress (REST + WPGraphQL) starter",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "lint": "npm --prefix frontend run lint",
+    "typecheck": "npm --prefix frontend run typecheck"
+  }
+}
