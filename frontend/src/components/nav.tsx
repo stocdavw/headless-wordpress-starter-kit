@@ -13,7 +13,7 @@ export default function Nav() {
                     height={40}
                     className={styles.logo}
                 />
-                <span className={styles.siteTitle}>Headless WP</span>
+                <span className={styles.siteTitle}>Headless WP Starter Kit</span>
             </Link>
         </nav>
     );

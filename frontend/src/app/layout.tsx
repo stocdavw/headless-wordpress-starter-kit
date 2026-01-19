@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Headless WP Starter",
+  title: "Headless WP Starter Kit",
   description: "Next.js + WordPress (REST + GraphQL) starter",
 };
 
