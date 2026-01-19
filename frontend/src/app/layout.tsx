@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Next.js + WordPress (REST + GraphQL) starter",
 };
 
+import Nav from "@/components/nav";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <Nav />
+        <main style={{ minHeight: 'calc(100vh - 80px)' }}>
+          {children}
+        </main>
       </body>
     </html>
   );

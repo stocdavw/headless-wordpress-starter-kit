@@ -1,6 +1,7 @@
 import Link from "next/link";
-import styles from "./page.module.css";
+import styles from "@/app/page.module.css";
 import { fetchGqlPostBySlug } from "@/lib/wp-graphql";
+import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -14,52 +15,27 @@ export default async function GraphqlPostPage({ params }: PageProps) {
   const post = await fetchGqlPostBySlug(slug);
 
   if (!post) {
-    return (
-      <div className={styles.wrapper}>
-        <div className={styles.inner}>
-          <p className={styles.eyebrow}>GraphQL</p>
-          <p>Post not found.</p>
-          <div className={styles.backRow}>
-            <Link href="/graphql-posts" className={styles.back}>
-              ← Back to GraphQL posts
-            </Link>
-            <Link href="/" className={styles.back}>
-              Home
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.inner}>
-        <p className={styles.eyebrow}>GraphQL</p>
-        <p className={styles.date}>
-          {post.date ? new Date(post.date).toLocaleDateString() : "No date"}
-        </p>
-        <h1 className={styles.title}>{post.title}</h1>
-        {post.content && (
-          <article
-            className={styles.excerpt}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        )}
-        {!post.content && post.excerpt && (
-          <article
-            className={styles.excerpt}
-            dangerouslySetInnerHTML={{ __html: post.excerpt }}
-          />
-        )}
-        <div className={styles.backRow}>
-          <Link href="/graphql-posts" className={styles.back}>
-            ← Back to GraphQL posts
+    <div className={styles.page}>
+      <div className={styles.section}>
+        <div className={styles.links} style={{ marginBottom: '24px' }}>
+          <Link href="/graphql-posts" className={styles.textLink}>
+            &larr; Back to GraphQL posts
           </Link>
-          <Link href="/" className={styles.back}>
+          <Link href="/" className={styles.textLink}>
             Home
           </Link>
         </div>
+        <article className="prose prose-invert lg:prose-xl">
+          <p className={styles.date} suppressHydrationWarning>
+            {post.date ? new Date(post.date).toLocaleDateString() : "No date"}
+          </p>
+          <h1 className={styles.title}>{post.title}</h1>
+          <div dangerouslySetInnerHTML={{ __html: post.content || post.excerpt || "" }} />
+        </article>
       </div>
     </div>
   );
